@@ -1,0 +1,5 @@
+{
+    "input": "..\/..\/..\/tests\/samplesheets\/rnafusion_samplesheet.csv",
+    "nf_core_pipeline": "rnafusion",
+    "outdir": "results"
+}
