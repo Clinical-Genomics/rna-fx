@@ -34,8 +34,8 @@ def createTomteSamplesheet ( Object dir ){
                         "${it.simpleName},0,${it},,"
                     }
             }
-            .flatMap { [ "sample,group,short_reads_1,short_reads_2,long_reads" ] + it }
-            .collectFile( name: 'mag_samplesheet.csv', newLine: true, sort: false )
+            .flatMap { [ "case,sample,strandedness,bam_cram,bai_crai" ] + it }
+            .collectFile( name: 'tomte_samplesheet.csv', newLine: true, sort: false )
     } else {
         Channel.value([])
     }
