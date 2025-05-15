@@ -19,7 +19,7 @@ workflow {
         "${params.all_cli?: ''} ${params.tomte_cli?: ''}",
         params.tomte_enabled && params.tomte_params ? file( params.tomte_params, checkIfExists: true ) : [],
         createTomteSamplesheet(rnafusion_output),
-        params.tomte_enabled && params.tomte ? file(params.tomte, checkIfExists: true) : [],
+        params.tomte_enabled && params.tomte_config ? file(params.tomte_config, checkIfExists: true) : [],
         workflow.workDir.resolve('gms/tomte').toUriString(),
     )
 }
