@@ -28,13 +28,41 @@ process NEXTFLOW_RUN {
     file("$task.workDir/nf-cmd.sh").text = nxf_cmd
     // Run nextflow command locally in cache directory
     def process = nxf_cmd.execute(null, cache_path.toFile())
+    def stdout = new StringBuilder()
+    def stderr = new StringBuilder()
+    process.consumeProcessOutput(stdout, stderr)
     process.waitFor()
-    stdout = process.text
-    assert process.exitValue() == 0: stdout
-    // Copy nextflow log to work directory
-    cache_path.resolve(".nextflow.log").copyTo("${task.workDir}/nextflow.log")
+
+    // Save output logs
+    file("${task.workDir}/stdout.log").text = stdout.toString()
+    file("${task.workDir}/stderr.log").text = stderr.toString()
+    // Copy nextflow log if it exists
+    def nf_log = cache_path.resolve(".nextflow.log")
+    if (nf_log.exists()) {
+        nf_log.copyTo("${task.workDir}/nextflow.log")
+    }
+
+    // Check exit status with detailed error message
+    if (process.exitValue() != 0) {
+        error """
+            Nested Nextflow process failed with exit code: ${process.exitValue()}
+            Command: ${nxf_cmd}
+            STDOUT: ${stdout.toString()}
+            STDERR: ${stderr.toString()}
+            See logs in: ${task.workDir}
+        """
+    }
 
     output:
     path "results" , emit: output
-    val stdout, emit: log
+    val stdout.toString(), emit: log
+
+    // stdout = process.text
+    // assert process.exitValue() == 0: stdout
+    // Copy nextflow log to work directory
+    // cache_path.resolve(".nextflow.log").copyTo("${task.workDir}/nextflow.log")
+
+    // output:
+    // path "results" , emit: output
+    // val stdout, emit: log
 }
