@@ -1,6 +1,6 @@
-include { NEXTFLOW_RUN as NFCORE_RNAFUSION         } from 'modules/local/nextflow/run/main'
-include { NEXTFLOW_RUN as GMS_TOMTE                } from 'modules/local/nextflow/run/main'
-include { createTomteSamplesheet                   } from 'functions/local/utils'
+include { NEXTFLOW_RUN as NFCORE_RNAFUSION         } from './modules/local/nextflow/run/main'
+include { NEXTFLOW_RUN as GMS_TOMTE                } from './modules/local/nextflow/run/main'
+include { createTomteSamplesheet                   } from './functions/local/utils'
 
 workflow {
 
