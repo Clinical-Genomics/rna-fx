@@ -5,35 +5,20 @@
  * @param default_channel  A channel to use as the default if no path is defined.
  * @return                 A channel with a path, or the default channel
  */
-def readWithDefault( String path, Object default_channel ) {
-    path ? Channel.fromPath( path, checkIfExists: true ) : default_channel
-}
 
-/**
- * Returns a channel with the file defined by the path resolved against the directory.
- *
- * @param path  The path of the file relative to the directory in dir
- * @param dir   A channel with a directory.
- * @return      A channel with a path relative to the dir path
- */
-def resolveFileFromDir ( String path, Object dir ){
-    dir.map{ results -> file( results.resolve( path ) ) }
-}
-
-/**
- * Returns a channel with a samplesheet for nf-core/mag.
- *
- * @param dir   A channel with a directory. Fastq.gz files are assumed to be in a folder called fastq here.
- * @return      A channel with a samplesheet or empty list
- */
 def createTomteSamplesheet ( Object dir ){
     if ( dir ) {
         dir.map { results ->
-                files( results.resolve( 'fastq/*fastq.gz' ), checkIfExists: true )
-                    .collect {
-                        "${it.simpleName},0,${it},,"
+                def bam_file = file(results.resolve('star/*bam'), checkIfExists: true)
+                def bai_file = file("star/*bam.bai", checkIfExists: true)
+                def strandedness = 'reverse'
+                "${bam_file.simpleName},0,${strandedness},${bam_file},${bai_file}"
                     }
-            }
+            //     files( results.resolve( 'cram/*cram' ), checkIfExists: true )
+            //         .collect {
+            //             "${it.simpleName},0,${it},,"
+            //         }
+            // }
             .flatMap { [ "case,sample,strandedness,bam_cram,bai_crai" ] + it }
             .collectFile( name: 'tomte_samplesheet.csv', newLine: true, sort: false )
     } else {

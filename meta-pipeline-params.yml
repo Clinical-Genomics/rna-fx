@@ -1,18 +1,18 @@
-# Run pipelines
-rnafusion_enabled: true
-tomte_enabled: true
+# # Run pipelines
+# rnafusion_enabled: true
+# tomte_enabled: true
 
-## Pipeline inputs
-### Use nf-core launch
-rnafusion_params: 'tests/params/rnafusion-params.json'
-# tomte_params: 'tests/params/fetchngs-params.json'
+# ## Pipeline inputs
+# ### Use nf-core launch
+# rnafusion_params: 'tests/params/rnafusion-params.json'
+# tomte_params: 'tests/params/tomte-params.json'
 
 
-## Command-line options
-all_cli: '-resume -ansi-log false -profile docker'
-rnafusion_cli: ''
-tomte_cli: ''
+# ## Command-line options
+# all_cli: '-resume -ansi-log false -profile singularity'
+# rnafusion_cli: ''
+# tomte_cli: ''
 
-## Additional configuration files
-# rnafusion_config: 'configs/multiqc.config'
-# tomte_config: 'configs/multiqc.config'
+# ## Additional configuration files
+# # rnafusion_config: 'configs/multiqc.config'
+# # tomte_config: 'configs/multiqc.config'
